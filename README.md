@@ -1,6 +1,6 @@
 # Campus Flow API
 
-A RESTful API built with Ruby on Rails to manage campus students and teacher accounts with JWT authentication and role-based authorization.
+A RESTful API built with Ruby on Rails to manage campus students and teacher accounts with JWT authentication and role-based authorization. This project demonstrates REST API development, authentication, authorization, database management, automated testing, and Docker containerization.
 
 ## Features
 
@@ -13,6 +13,7 @@ A RESTful API built with Ruby on Rails to manage campus students and teacher acc
 - Admin-only teacher account creation
 - Model validations and strong parameters
 - Automated request tests using RSpec
+- Docker-based application and PostgreSQL setup
 
 ## Tech Stack
 
@@ -23,19 +24,30 @@ A RESTful API built with Ruby on Rails to manage campus students and teacher acc
 - Devise JWT
 - RSpec Rails
 - FactoryBot
+- Docker
+- Docker Compose
 
 ## Prerequisites
+
+### For Local Setup
 
 - Ruby and Bundler
 - PostgreSQL
 - Git
 
+### For Docker Setup
+
+- Docker
+- Docker Compose
+
 ## Setup
+
+### Option 1: Run Locally
 
 Clone the repository and enter the project directory:
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
+git clone https://github.com/ramya-murugan-s/campus_flow_api.git
 cd campus_flow_api
 ```
 
@@ -45,20 +57,60 @@ Install dependencies:
 bundle install
 ```
 
-Configure the PostgreSQL connection, then create and migrate the database:
+Configure the PostgreSQL connection and required Rails credentials for your local environment.
+
+Create and migrate the database:
 
 ```bash
 bin/rails db:create
 bin/rails db:migrate
 ```
 
-Start the server:
+Start the Rails server:
 
 ```bash
 bin/rails server
 ```
 
-The default local server URL is `http://localhost:3000`.
+The default local server URL is:
+
+`http://localhost:3000`
+
+### Option 2: Run Using Docker
+
+Ensure Docker and Docker Compose are installed and running.
+
+Configure the required environment variables in a local `.env` file. Set `POSTGRES_PASSWORD` and `RAILS_MASTER_KEY` with the appropriate values for your environment. Never commit `.env` or real secret values to Git.
+
+Build the Docker image and start the application:
+
+```bash
+docker-compose up -d --build
+```
+
+Check the running containers:
+
+```bash
+docker-compose ps
+```
+
+View application logs:
+
+```bash
+docker-compose logs --tail=50 web
+```
+
+The application is available at:
+
+`http://localhost:3000`
+
+Stop the containers:
+
+```bash
+docker-compose down
+```
+
+The PostgreSQL data is stored in a Docker volume so that it can persist when containers are stopped and restarted.
 
 ## API Endpoints
 
@@ -96,6 +148,8 @@ Never publish real passwords, JWT tokens, or secret keys.
 
 ## Example: Create a Student
 
+Send this JSON body to `POST /api/v1/students` with a valid JWT:
+
 ```json
 {
   "student": {
@@ -106,9 +160,9 @@ Never publish real passwords, JWT tokens, or secret keys.
 }
 ```
 
-Send this JSON body to `POST /api/v1/students` with a valid JWT.
-
 ## Running Tests
+
+### Run Tests Locally
 
 Run the full test suite:
 
@@ -116,15 +170,27 @@ Run the full test suite:
 bundle exec rspec
 ```
 
-Latest verified result: **29 examples, 0 failures**.
+### Run Tests Using Docker
+
+Run the test suite inside Docker with the test environment enabled:
+
+```bash
+docker-compose run --rm -e RAILS_ENV=test web bundle exec rspec
+```
+
+**Latest verified test result:** 29 examples, 0 failures.
 
 ## Security
 
 - Keep credentials and secret keys out of version control.
+- Store local secrets in `.env` and ensure the file is ignored by Git.
+- Never commit `config/master.key` or expose production credentials.
 - Use HTTPS in production.
 - Enforce authorization on protected endpoints.
-- Use safe environment configuration for secrets.
+- Use appropriate environment configuration for secrets.
 
 ## Project Scope
 
-This is an API-only project. Add separate frontend or Docker deployment instructions only after those components have been implemented and tested.
+This is an API-only project focused on backend development, JWT authentication, role-based authorization, PostgreSQL database integration, automated testing, and Docker-based development.
+
+The project does not include a separate frontend application.
