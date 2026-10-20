@@ -1,0 +1,14 @@
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+config/master.key
+log/*
+tmp/*
+storage/*
+coverage/
+vendor/
+.bundle/
+node_modules/
+.DS_Store
